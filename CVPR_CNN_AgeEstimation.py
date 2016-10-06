@@ -95,7 +95,7 @@ y_ = []
 sample_name = []
 testdata_name = []
 
-f = csv.reader(open("csv", "rb"), delimiter=",", quotechar="'")
+f = csv.reader(open("train.csv", "rb"), delimiter=",", quotechar="'")
 
 for row in f:
     for age, num in zip(age_interval, range(13)):
