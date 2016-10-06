@@ -3,8 +3,6 @@
 import numpy as np
 import csv
 from PIL import Image
-#from keras.datasets import mnist
-#from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten, Input
 from keras.layers import Convolution2D, MaxPooling2D
 from keras.utils import np_utils
@@ -15,11 +13,6 @@ from keras.models import load_model
 from keras.callbacks import ModelCheckpoint
 from keras.utils.visualize_util import plot
 
-#from keras.utils.visualize_util import plot
-
-#from keras.layers.normalization2 import LRN2D
-
-#画像読み込み
 age_interval = [0,5,10,15,20,25,30,35,40,45,50,55,60]
 age_count_train = [0,0,0,0,0,0,0,0,0,0,0,0,0]
 age_count_test = [0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -102,7 +95,6 @@ for row in f:
         print "TrainData",
         print row[1],
         print age,
-        #print age_count[num]
         if row[1] == str(age) and age_count_train[num] < 1000:
             img_name = "croppedImg/" + str(row[0])
             try:
@@ -118,7 +110,6 @@ for row in f:
                     y_.append(0)
                     Y_train_list[i].append(0)
             #print num
-            #print y_
             Y_train.append(y_)
             y_ = []
             age_count_train[num] += 1
@@ -140,7 +131,6 @@ for row in f:
                     y_.append(0)
 		            Y_test_list[i].append(0)
             #print num
-            #print y_
             Y_test.append(y_)
             y_ = []
             age_count_test[num] += 1
@@ -179,13 +169,8 @@ nb_conv_3 = 11
 
 main_input = Input(shape=(3, 60, 60))
 
-#model = Convolution2D(nb_filters_1, nb_conv_1, nb_conv_1,
-#                        border_mode="valid",
-#                        input_shape=(3, input_image_size_rows, input_image_size_cols))(main_input)
 y = Convolution2D(nb_filters_1, nb_conv_1, nb_conv_1, border_mode="valid")(main_input)
-
 y = Activation("relu")(y)
-#model.add(LRN2D())
 y = MaxPooling2D(pool_size=(nb_pool_1, nb_pool_1), strides=(2,2))(y)
 
 y = Convolution2D(nb_filters_2, nb_conv_2, nb_conv_2, border_mode="valid")(y)
@@ -197,11 +182,6 @@ y = Activation("relu")(y)
 
 y = Flatten()(y)
 y = Dense(80)(y)
-#model.add(Activation("softmax"))
-
-#outputs = []
-#for i in range(13):
-#    outputs.append(Dense(2, activation="softmax", name=("output" + str(i)))(y))
 
 output1 = Dense(1, activation="sigmoid")(y)
 output2 = Dense(1, activation="sigmoid")(y)
@@ -221,8 +201,6 @@ model = Model(input = [main_input], output = [output1,output2,output3,output4,ou
 
 sgd = SGD(lr=0.01, momentum=0.9, decay=1e-6, nesterov=True)
 model.compile(loss = "binary_crossentropy",optimizer=sgd, metrics=['accuracy'])
-#model.compile(loss = "binary_crossentropy", optimizer=sgd, metrics=['accuracy'])
-#plot(model, to_file='model.png')
 
 X_train = X_train.astype('float32')
 X_test = X_test.astype('float32')
