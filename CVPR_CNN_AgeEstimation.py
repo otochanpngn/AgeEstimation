@@ -227,22 +227,27 @@ X_test /= 255
 #各エポックごとにモデルを保存するらしいけど、正常に動作していないように思われる。要検討。
 checkpointer = ModelCheckpoint(filepath="weights.{epoch:02d}-{val_loss:.2f}.hdf5", verbose=1, save_best_only=True)
 
-model.fit(X_train, [Y_train_list[0],Y_train_list[1],
-			Y_train_list[2],Y_train_list[3],
-			Y_train_list[4],Y_train_list[5],
-			Y_train_list[6],Y_train_list[7],
-			Y_train_list[8],Y_train_list[9],
-			Y_train_list[10],Y_train_list[11],Y_train_list[12]],
-			verbose = 1, nb_epoch=50, batch_size=100,
-			validation_data = (X_test, [Y_test_list[0], Y_test_list[1], Y_test_list[2],
-						    Y_test_list[3], Y_test_list[4], Y_test_list[5],
-						    Y_test_list[6], Y_test_list[7], Y_test_list[8],
-						    Y_test_list[9], Y_test_list[10], Y_test_list[11], Y_test_list[12]]))
+model.fit(X_train, 
+	  [Y_train_list[0],Y_train_list[1],
+	   	Y_train_list[2],Y_train_list[3],
+	   	Y_train_list[4],Y_train_list[5],
+           	Y_train_list[6],Y_train_list[7],
+	   	Y_train_list[8],Y_train_list[9],
+	   	Y_train_list[10],Y_train_list[11],Y_train_list[12]],
+	   verbose = 1, 
+	   nb_epoch=50, 
+	   batch_size=100,
+	   validation_data = (X_test, [Y_test_list[0], Y_test_list[1], Y_test_list[2],
+				       Y_test_list[3], Y_test_list[4], Y_test_list[5],
+				       Y_test_list[6], Y_test_list[7], Y_test_list[8],
+				       Y_test_list[9], Y_test_list[10], Y_test_list[11], Y_test_list[12]]))
+
 score = model.evaluate(X_test, [Y_test_list[0], Y_test_list[1], Y_test_list[2],
 				                 Y_test_list[3], Y_test_list[4], Y_test_list[5],
 				                 Y_test_list[6], Y_test_list[7], Y_test_list[8],
 				                 Y_test_list[9], Y_test_list[10], Y_test_list[11], Y_test_list[12]],
 				                 verbose=1, batch_size =100)
+
 print("Test score:", score[0])
 print("Test accuracy:", score[1])
 
