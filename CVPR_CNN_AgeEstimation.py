@@ -251,9 +251,12 @@ model.save('model_epoch_50.h5')
 score = model.predict(X_test, batch_size=len(X_test),verbose=1)
 print 'len score:', len(score)
 
+#MAEの計算用の変数
 maeN = 0
 age_count_0 = 0
 
+#MAEの計算
+#計算方法があっているか検証していないので、計算結果を鵜呑みにしないように。
 for j,k in zip(range(len(X_test)), sample_name):
     print testdata_name[j]
     print "result:", int(k)/5,
@@ -267,4 +270,5 @@ for j,k in zip(range(len(X_test)), sample_name):
 
 print "MAE:", float(maeN) / float(len(X_test))
 
+#生成したモデルをグラフで表示
 plot(model, to_file="model.png")
