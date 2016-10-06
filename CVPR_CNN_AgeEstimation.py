@@ -214,8 +214,8 @@ output11 = Dense(1, activation="sigmoid")(y)
 output12 = Dense(1, activation="sigmoid")(y)
 output13 = Dense(1, activation="sigmoid")(y)
 
+#モデルの生成
 model = Model(input = [main_input], output = [output1,output2,output3,output4,output5,output6,output7,output8,output9,output10,output11,output12,output13])
-
 sgd = SGD(lr=0.01, momentum=0.9, decay=1e-6, nesterov=True)
 model.compile(loss = "binary_crossentropy",optimizer=sgd, metrics=['accuracy'])
 
@@ -224,6 +224,7 @@ X_test = X_test.astype('float32')
 X_train /= 255
 X_test /= 255
 
+#各エポックごとにモデルを保存するらしいけど、正常に動作していないように思われる。要検討。
 checkpointer = ModelCheckpoint(filepath="weights.{epoch:02d}-{val_loss:.2f}.hdf5", verbose=1, save_best_only=True)
 
 model.fit(X_train, [Y_train_list[0],Y_train_list[1],
