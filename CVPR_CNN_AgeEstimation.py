@@ -13,10 +13,6 @@ from keras.models import load_model
 from keras.callbacks import ModelCheckpoint
 from keras.utils.visualize_util import plot
 
-age_interval = [0,5,10,15,20,25,30,35,40,45,50,55,60]
-age_count_train = [0,0,0,0,0,0,0,0,0,0,0,0,0]
-age_count_test = [0,0,0,0,0,0,0,0,0,0,0,0,0]
-
 X_train = []
 Y_train = []
 
@@ -90,11 +86,22 @@ testdata_name = []
 
 f = csv.reader(open("train.csv", "rb"), delimiter=",", quotechar="'")
 
+#0歳から60歳までを5歳間隔で分類する
+age_interval = [0,5,10,15,20,25,30,35,40,45,50,55,60]
+
+#学習とテストに用いる画像の枚数をカウントする
+#学習用は各年齢層ごとに１０００枚用意
+#テスト用は各年齢層ごとに１００枚用意
+age_count_train = [0,0,0,0,0,0,0,0,0,0,0,0,0]
+age_count_test = [0,0,0,0,0,0,0,0,0,0,0,0,0]
+
 for row in f:
     for age, num in zip(age_interval, range(13)):
         print "TrainData",
         print row[1],
         print age,
+	
+	#テスト用に各年齢層ごとに１０００枚
         if row[1] == str(age) and age_count_train[num] < 1000:
             img_name = "croppedImg/" + str(row[0])
             try:
@@ -114,6 +121,7 @@ for row in f:
             y_ = []
             age_count_train[num] += 1
 
+	#評価用に各年齢層ごとに１００枚
         elif row[1] == str(age) and age_count_test[num] < 100:
             img_name = "croppedImg/" + str(row[0])
             sample_name.append(row[1])
@@ -153,9 +161,11 @@ for i in range(13):
 
 print Y_train_list[0]
 
+#画像サイズ60×６０
 input_image_size_rows = 60
 input_image_size_cols = 60
 
+#Convolution層のパラメータ
 nb_filters_1 = 20
 nb_conv_1 = 5
 nb_pool_1 = 2
@@ -167,22 +177,29 @@ nb_pool_2 = 2
 nb_filters_3 = 80
 nb_conv_3 = 11
 
+#入力層
 main_input = Input(shape=(3, 60, 60))
 
+#1つ目のConvolution層
 y = Convolution2D(nb_filters_1, nb_conv_1, nb_conv_1, border_mode="valid")(main_input)
 y = Activation("relu")(y)
 y = MaxPooling2D(pool_size=(nb_pool_1, nb_pool_1), strides=(2,2))(y)
 
+#2つ目のConvolution層
 y = Convolution2D(nb_filters_2, nb_conv_2, nb_conv_2, border_mode="valid")(y)
 y = Activation("relu")(y)
 y = MaxPooling2D(pool_size=(nb_pool_2, nb_pool_2), strides=(2,2))(y)
 
+#3つ目のConvolution層
 y = Convolution2D(nb_filters_3, nb_conv_3, nb_conv_3, border_mode="valid")(y)
 y = Activation("relu")(y)
 
+#全結合層
 y = Flatten()(y)
 y = Dense(80)(y)
 
+#出力層
+#１３個の年齢層ごとの出力
 output1 = Dense(1, activation="sigmoid")(y)
 output2 = Dense(1, activation="sigmoid")(y)
 output3 = Dense(1, activation="sigmoid")(y)
