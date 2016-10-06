@@ -95,7 +95,7 @@ y_ = []
 sample_name = []
 testdata_name = []
 
-f = csv.reader(open("../ABEJAFaceAttributeDatasets/detail.csv", "rb"), delimiter=",", quotechar="'")
+f = csv.reader(open("csv", "rb"), delimiter=",", quotechar="'")
 
 for row in f:
     for age, num in zip(age_interval, range(13)):
@@ -104,7 +104,7 @@ for row in f:
         print age,
         #print age_count[num]
         if row[1] == str(age) and age_count_train[num] < 1000:
-            img_name = "../ABEJAFaceAttributeDatasets/croppedImg/" + str(row[0])
+            img_name = "croppedImg/" + str(row[0])
             try:
                 img = np.array( Image.open(img_name) ).transpose(2,0,1)
             except:
@@ -124,7 +124,7 @@ for row in f:
             age_count_train[num] += 1
 
         elif row[1] == str(age) and age_count_test[num] < 100:
-            img_name = "../ABEJAFaceAttributeDatasets/croppedImg/" + str(row[0])
+            img_name = "croppedImg/" + str(row[0])
             sample_name.append(row[1])
             testdata_name.append(row[0])
             try:
