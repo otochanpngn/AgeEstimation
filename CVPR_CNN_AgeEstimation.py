@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+#CVPR2016の論文を参考に実装した年齢推アルゴリズム
+#http://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Niu_Ordinal_Regression_With_CVPR_2016_paper.pdf
+
 import numpy as np
 import csv
 from PIL import Image
@@ -103,7 +106,7 @@ for row in f:
 	
 	#テスト用に各年齢層ごとに１０００枚
         if row[1] == str(age) and age_count_train[num] < 1000:
-            img_name = "croppedImg/" + str(row[0])
+            img_name = "testImg/" + str(row[0])
             try:
                 img = np.array( Image.open(img_name) ).transpose(2,0,1)
             except:
@@ -123,7 +126,7 @@ for row in f:
 
 	#評価用に各年齢層ごとに１００枚
         elif row[1] == str(age) and age_count_test[num] < 100:
-            img_name = "croppedImg/" + str(row[0])
+            img_name = "TrainImg/" + str(row[0])
             sample_name.append(row[1])
             testdata_name.append(row[0])
             try:
@@ -261,7 +264,6 @@ maeN = 0
 age_count_0 = 0
 
 #MAEの計算
-#計算方法があっているか検証していないので、計算結果を鵜呑みにしないように。
 for j,k in zip(range(len(X_test)), sample_name):
     print testdata_name[j]
     print "result:", int(k)/5,
